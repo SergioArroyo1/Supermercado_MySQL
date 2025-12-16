@@ -21,7 +21,6 @@ import java.util.Optional;
  * REPOSITORIO: ProductoRepository (JDBC)
  * ============================================
  * Clase que proporciona acceso a datos usando JDBC tradicional.
- *
  * DIFERENCIAS CON LA VERSIÓN JPA:
  * ─────────────────────────────────────────────
  * | VERSIÓN JPA/HIBERNATE    | VERSIÓN JDBC     |
@@ -32,19 +31,15 @@ import java.util.Optional;
  * | Mapeo automático         | RowMapper manual |
  * | findAll() heredado       | SELECT * escrito |
  * ─────────────────────────────────────────────
- *
  * Esta versión permite ver exactamente qué ocurre "por debajo"
  * cuando usamos frameworks ORM como Hibernate.
- *
- * @author Profesor DAM
  * @version 1.0 - Versión JDBC tradicional
  */
 @Repository
 public class ProductoRepository {
 
-    // ========================================
     // JDBCTEMPLATE
-    // ========================================
+
     /**
      * JdbcTemplate es una clase de Spring que simplifica
      * el uso de JDBC. Gestiona automáticamente:
@@ -52,7 +47,6 @@ public class ProductoRepository {
      * - Creación de Statement/PreparedStatement
      * - Manejo de excepciones
      * - Liberación de recursos
-     *
      * Sin JdbcTemplate tendríamos que hacer todo esto manualmente
      * con try-catch-finally y Connection/Statement/ResultSet.
      */
@@ -61,24 +55,20 @@ public class ProductoRepository {
     /**
      * Constructor con inyección de dependencias.
      * Spring inyecta automáticamente el JdbcTemplate configurado.
-     *
-     * @param jdbcTemplate Template JDBC inyectado por Spring
+     * jdbcTemplate Template JDBC inyectado por Spring
      */
     @Autowired
     public ProductoRepository(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    // ========================================
     // ROWMAPPER - MAPEO MANUAL DE RESULTADOS
-    // ========================================
+
     /**
      * RowMapper es una interfaz funcional que define cómo
      * convertir cada fila del ResultSet en un objeto Producto.
-     *
      * ESTO ES LO QUE HIBERNATE HACE AUTOMÁTICAMENTE
      * cuando usamos @Entity y @Column.
-     *
      * Aquí lo hacemos manualmente para que los alumnos
      * entiendan el proceso de mapeo objeto-relacional.
      */
@@ -89,7 +79,7 @@ public class ProductoRepository {
             Producto producto = new Producto();
 
             // Extraemos cada columna del ResultSet y la asignamos al objeto
-            // NOTA: Los nombres de columna deben coincidir con la BD
+            // Los nombres deben coincidir con los de la BD
             producto.setId(rs.getLong("id"));
             producto.setNombre(rs.getString("nombre"));
             producto.setDescripcion(rs.getString("descripcion"));
@@ -101,17 +91,14 @@ public class ProductoRepository {
         }
     };
 
-    // ========================================
+
     // MÉTODOS CRUD
-    // ========================================
 
     /**
      * Obtiene todos los productos de la base de datos.
-     *
      * Equivalente en JPA: productoRepository.findAll()
      * Aquí escribimos el SQL manualmente.
-     *
-     * @return Lista con todos los productos
+     * Lista con todos los productos
      */
     public List<Producto> findAll() {
         // SQL escrito manualmente - en JPA esto es automático
@@ -123,11 +110,9 @@ public class ProductoRepository {
 
     /**
      * Busca un producto por su ID.
-     *
      * Equivalente en JPA: productoRepository.findById(id)
-     *
-     * @param id ID del producto a buscar
-     * @return Optional con el producto o vacío si no existe
+     * id ID del producto a buscar
+     * Optional con el producto o vacío si no existe
      */
     public Optional<Producto> findById(Long id) {
         String sql = "SELECT id, nombre, descripcion, precio, stock, categoria FROM productos WHERE id = ?";
@@ -144,11 +129,9 @@ public class ProductoRepository {
 
     /**
      * Guarda un nuevo producto en la base de datos.
-     *
      * Equivalente en JPA: productoRepository.save(producto)
-     *
-     * @param producto Producto a guardar
-     * @return Producto guardado con el ID generado
+     * producto Producto a guardar
+     * Producto guardado con el ID generado
      */
     public Producto save(Producto producto) {
         String sql = "INSERT INTO productos (nombre, descripcion, precio, stock, categoria) VALUES (?, ?, ?, ?, ?)";
@@ -178,9 +161,8 @@ public class ProductoRepository {
 
     /**
      * Actualiza un producto existente.
-     *
-     * @param producto Producto con los datos actualizados
-     * @return Número de filas afectadas (debería ser 1)
+     * Producto con los datos actualizados
+     * Número de filas afectadas (debería ser 1)
      */
     public int update(Producto producto) {
         String sql = "UPDATE productos SET nombre = ?, descripcion = ?, precio = ?, stock = ?, categoria = ? WHERE id = ?";
@@ -198,11 +180,9 @@ public class ProductoRepository {
 
     /**
      * Elimina un producto por su ID.
-     *
      * Equivalente en JPA: productoRepository.deleteById(id)
-     *
-     * @param id ID del producto a eliminar
-     * @return Número de filas afectadas (debería ser 1)
+     * id ID del producto a eliminar
+     * Número de filas afectadas (debería ser 1)
      */
     public int deleteById(Long id) {
         String sql = "DELETE FROM productos WHERE id = ?";
@@ -211,10 +191,8 @@ public class ProductoRepository {
 
     /**
      * Cuenta el total de productos.
-     *
      * Equivalente en JPA: productoRepository.count()
-     *
-     * @return Número total de productos
+     * Número total de productos
      */
     public long count() {
         String sql = "SELECT COUNT(*) FROM productos";
@@ -222,19 +200,16 @@ public class ProductoRepository {
         return count != null ? count : 0;
     }
 
-    // ========================================
+
     // MÉTODOS DE CONSULTA PERSONALIZADOS
-    // ========================================
 
     /**
      * Busca productos por categoría.
-     *
      * En JPA esto sería: findByCategoria(String categoria)
      * y el framework generaría el SQL automáticamente.
      * Aquí lo escribimos nosotros.
-     *
-     * @param categoria Categoría a buscar
-     * @return Lista de productos de esa categoría
+     * categoria Categoría a buscar
+     * Lista de productos de esa categoría
      */
     public List<Producto> findByCategoria(String categoria) {
         String sql = "SELECT id, nombre, descripcion, precio, stock, categoria FROM productos WHERE categoria = ?";
@@ -243,11 +218,9 @@ public class ProductoRepository {
 
     /**
      * Busca productos cuyo nombre contenga el texto especificado.
-     *
      * En JPA: findByNombreContainingIgnoreCase(String nombre)
-     *
-     * @param nombre Texto a buscar
-     * @return Lista de productos que coinciden
+     * nombre Texto a buscar
+     * Lista de productos que coinciden
      */
     public List<Producto> findByNombreContaining(String nombre) {
         String sql = "SELECT id, nombre, descripcion, precio, stock, categoria FROM productos WHERE LOWER(nombre) LIKE LOWER(?)";
@@ -256,9 +229,7 @@ public class ProductoRepository {
 
     /**
      * Busca productos con precio menor o igual al especificado.
-     *
-     * @param precioMaximo Precio máximo
-     * @return Lista de productos
+     * Desde el que menos precio al que mas precio tiene
      */
     public List<Producto> findByPrecioLessThanEqual(BigDecimal precioMaximo) {
         String sql = "SELECT id, nombre, descripcion, precio, stock, categoria FROM productos WHERE precio <= ? ORDER BY precio";
@@ -267,8 +238,7 @@ public class ProductoRepository {
 
     /**
      * Obtiene productos con stock disponible.
-     *
-     * @return Lista de productos con stock > 0
+     * Lista de productos con stock > 0
      */
     public List<Producto> findByStockGreaterThanZero() {
         String sql = "SELECT id, nombre, descripcion, precio, stock, categoria FROM productos WHERE stock > 0";
@@ -277,8 +247,6 @@ public class ProductoRepository {
 
     /**
      * Obtiene todas las categorías distintas.
-     *
-     * @return Lista de categorías únicas
      */
     public List<String> findAllCategorias() {
         String sql = "SELECT DISTINCT categoria FROM productos ORDER BY categoria";
@@ -287,8 +255,7 @@ public class ProductoRepository {
 
     /**
      * Obtiene productos ordenados por precio.
-     *
-     * @return Lista de productos ordenados de menor a mayor precio
+     * Del menor al mayor
      */
     public List<Producto> findAllOrderByPrecio() {
         String sql = "SELECT id, nombre, descripcion, precio, stock, categoria FROM productos ORDER BY precio ASC";
