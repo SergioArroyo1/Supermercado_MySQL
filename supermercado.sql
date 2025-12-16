@@ -1,7 +1,8 @@
 DROP DATABASE IF EXISTS supermercado;
 CREATE DATABASE IF NOT EXISTS supermercado
-	CHARACTER SET utf8mb4
-		COLLATE utf8mb4_spanish_ci;
+CHARACTER SET utf8mb4
+COLLATE utf8mb4_spanish_ci;
+
 USE supermercado;
 
 
@@ -80,7 +81,6 @@ ORDER BY categoria;
 SELECT id, nombre, precio, stock, categoria 
 FROM productos 
 LIMIT 10;
-
 
 
 
