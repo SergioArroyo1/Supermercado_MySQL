@@ -13,7 +13,6 @@ import java.util.List;
  * CLASE PRINCIPAL: SupermercadoApplication
  * ============================================
  * Versión con JDBC tradicional (sin Hibernate/JPA)
- *
  * COMPARACIÓN DE ENFOQUES:
  * ───────────────────────────────────────────────────────────────
  * │ Aspecto              │ JDBC Tradicional    │ JPA/Hibernate   │
@@ -26,11 +25,7 @@ import java.util.List;
  * │ Curva aprendizaje    │ Más simple          │ Más compleja    │
  * │ Productividad        │ Menor               │ Mayor           │
  * ───────────────────────────────────────────────────────────────
- *
  * Esta versión te permite entender qué hace Hibernate "por debajo".
- *
- * @author Profesor DAM
- * @version 1.0 - Versión JDBC tradicional
  */
 @SpringBootApplication
 public class SupermercadoApplication {
@@ -52,37 +47,35 @@ public class SupermercadoApplication {
         System.out.println("│ El mapeo ResultSet -> Objeto se hace con RowMapper.              │");
         System.out.println("└──────────────────────────────────────────────────────────────────┘");
         System.out.println();
-
-        // =====================================================
+        
         // PASO 1: Iniciar Spring Boot y obtener el contexto
-        // =====================================================
+
         System.out.println(">>> Iniciando aplicación Spring Boot...\n");
 
         ApplicationContext contexto = SpringApplication.run(SupermercadoApplication.class, args);
 
         System.out.println("\n>>> Contexto de Spring inicializado correctamente.");
         System.out.println(">>> Total de beans registrados: " + contexto.getBeanDefinitionCount());
-
-        // =====================================================
+        
         // PASO 2: Obtener el Bean de ProductoService
-        // =====================================================
+
         System.out.println("\n>>> Obteniendo el bean ProductoService del contexto...");
 
         ProductoService productoService = contexto.getBean(ProductoService.class);
 
         System.out.println(">>> Bean ProductoService obtenido correctamente.");
 
-        // =====================================================
+
         // PASO 3: Usar el servicio para obtener los productos
-        // =====================================================
+
         System.out.println("\n>>> Consultando productos en la base de datos...");
         System.out.println("═".repeat(65));
 
         List<Producto> productos = productoService.obtenerTodosLosProductos();
 
-        // =====================================================
+
         // PASO 4: Mostrar los productos obtenidos
-        // =====================================================
+
         System.out.println("\n╔══════════════════════════════════════════════════════════════════╗");
         System.out.println("║                    LISTADO DE PRODUCTOS                          ║");
         System.out.println("╚══════════════════════════════════════════════════════════════════╝");
@@ -101,9 +94,9 @@ public class SupermercadoApplication {
 
             System.out.println("-".repeat(65));
 
-            // =====================================================
+
             // DEMOSTRACIÓN: Otras consultas del servicio
-            // =====================================================
+
             System.out.println("\n>>> Demostrando otras funcionalidades del servicio...\n");
 
             // Obtener categorías
@@ -121,10 +114,9 @@ public class SupermercadoApplication {
             System.out.println("\n📊 Estadísticas:");
             System.out.println("   • Total de productos en BD: " + totalProductos);
         }
-
-        // =====================================================
+        
         // Mensaje final comparativo
-        // =====================================================
+ 
         System.out.println("\n═".repeat(65));
         System.out.println(">>> Aplicación finalizada correctamente.");
         System.out.println();
