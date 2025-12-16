@@ -10,49 +10,38 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * ============================================
  * SERVICIO: ProductoService (JDBC)
- * ============================================
  * Clase de servicio que contiene la lógica de negocio
  * para gestionar productos del supermercado.
- *
  * Esta clase es prácticamente igual que en la versión JPA.
  * La diferencia está en el REPOSITORIO que usa:
  * - Versión JPA: El repositorio hereda de JpaRepository
  * - Versión JDBC: El repositorio usa JdbcTemplate manualmente
- *
  * El servicio actúa como intermediario y no le importa
  * cómo el repositorio accede a los datos (principio de abstracción).
- *
- * @author Profesor DAM
- * @version 1.0 - Versión JDBC tradicional
  */
 @Service
 public class ProductoService {
 
-    // ========================================
+
     // INYECCIÓN DE DEPENDENCIAS
-    // ========================================
 
     private final ProductoRepository productoRepository;
 
     /**
      * Constructor con inyección de dependencias.
-     *
-     * @param productoRepository Repositorio JDBC de productos
+     * productoRepository Repositorio JDBC de productos
      */
     @Autowired
     public ProductoService(ProductoRepository productoRepository) {
         this.productoRepository = productoRepository;
     }
 
-    // ========================================
+
     // MÉTODOS CRUD BÁSICOS
-    // ========================================
 
     /**
      * Obtiene todos los productos de la base de datos.
-     *
      * @return List<Producto> Lista con todos los productos
      */
     public List<Producto> obtenerTodosLosProductos() {
@@ -67,8 +56,7 @@ public class ProductoService {
 
     /**
      * Busca un producto por su ID.
-     *
-     * @param id ID del producto a buscar
+     * id ID del producto a buscar
      * @return Optional<Producto> Producto encontrado o vacío si no existe
      */
     public Optional<Producto> obtenerProductoPorId(Long id) {
@@ -79,7 +67,6 @@ public class ProductoService {
 
     /**
      * Guarda un nuevo producto.
-     *
      * @param producto Producto a guardar
      * @return Producto guardado con ID asignado
      */
@@ -91,7 +78,6 @@ public class ProductoService {
 
     /**
      * Actualiza un producto existente.
-     *
      * @param producto Producto con los datos actualizados
      * @return true si se actualizó correctamente
      */
@@ -103,7 +89,6 @@ public class ProductoService {
 
     /**
      * Elimina un producto por su ID.
-     *
      * @param id ID del producto a eliminar
      * @return true si se eliminó correctamente
      */
@@ -114,13 +99,11 @@ public class ProductoService {
         return filasAfectadas > 0;
     }
 
-    // ========================================
+
     // MÉTODOS DE CONSULTA ADICIONALES
-    // ========================================
 
     /**
      * Obtiene productos por categoría.
-     *
      * @param categoria Categoría a buscar
      * @return Lista de productos de esa categoría
      */
@@ -132,7 +115,6 @@ public class ProductoService {
 
     /**
      * Busca productos por nombre (búsqueda parcial).
-     *
      * @param nombre Texto a buscar en el nombre
      * @return Lista de productos que coinciden
      */
@@ -143,7 +125,6 @@ public class ProductoService {
 
     /**
      * Obtiene productos con stock disponible.
-     *
      * @return Lista de productos con stock > 0
      */
     public List<Producto> obtenerProductosDisponibles() {
@@ -153,9 +134,8 @@ public class ProductoService {
 
     /**
      * Obtiene productos por debajo de un precio máximo.
-     *
-     * @param precioMaximo Precio máximo
-     * @return Lista de productos
+     * precioMaximo Precio máximo
+     * Lista de productos
      */
     public List<Producto> obtenerProductosPorPrecioMaximo(BigDecimal precioMaximo) {
         System.out.println("\n[SERVICE] Buscando productos con precio <= " + precioMaximo);
@@ -164,8 +144,7 @@ public class ProductoService {
 
     /**
      * Cuenta el total de productos en la base de datos.
-     *
-     * @return Número total de productos
+     * Número total de productos
      */
     public long contarProductos() {
         return productoRepository.count();
@@ -173,8 +152,7 @@ public class ProductoService {
 
     /**
      * Obtiene todas las categorías disponibles.
-     *
-     * @return Lista de categorías únicas
+     * Lista de categorías únicas
      */
     public List<String> obtenerCategorias() {
         System.out.println("\n[SERVICE] Obteniendo lista de categorías...");
